@@ -10,10 +10,20 @@ import { Month } from './params/Month';
 import { Location } from './params/Location';
 import { GameSegment } from './params/GameSegment';
 import { NbaApiEndpoint } from './params/NbaApiEndpoint';
+import { PlayerExperience } from './params/PlayerExperience';
+import { PlayerPosition } from './params/PlayerPosition';
+import { StarterBench } from './params/StarterBench';
+import { Conference } from './params/Conference';
+import { Division } from './params/Division';
 
-export interface TeamStatsResponse {}
+export interface PlayerStatsResults {}
 
-export function getTeamStats(
+export function getPlayerStats(
+  playerExperience: PlayerExperience,
+  playerPosition: PlayerPosition,
+  starterBench: StarterBench,
+  vsConference: Conference,
+  vsDivision: Division,
   team: Team,
   season = Season.DEFAULT,
   measureType = MeasureType.DEFAULT,
@@ -31,9 +41,16 @@ export function getTeamStats(
   gameSegment = GameSegment.ENTIRE_GAME,
   period = 0,
   lastNGames = 0,
-): TeamStatsResponse {
+  gameScope = '',
+): PlayerStatsResults {
 
-  return nbaApi(NbaApiEndpoint.TEAM_STATS, {
+  return nbaApi(NbaApiEndpoint.PLAYER_STATS, {
+    playerExperience,
+    playerPosition,
+    starterBench,
+    vsConference,
+    vsDivision,
+    gameScope,
     team,
     season,
     measureType,

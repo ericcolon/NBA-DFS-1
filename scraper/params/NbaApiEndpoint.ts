@@ -10,4 +10,5 @@ export enum NbaApiEndpoint {
   BOX_SCORE_USAGE = 'boxscoreusagev2',
   PLAY_BY_PLAY = 'playbyplayv2',
   TEAM_STATS = 'leaguedashteamstats',
+  PLAYER_STATS = 'leaguedashplayerstats'
 }
