@@ -1,13 +1,15 @@
 export type LogLevel = 'warn'|'log'|'error'|'info'
 
-const log = (level: LogLevel) => (x: any, ...args: any[]): any {
+const _log = (level: LogLevel) => (x: any, ...args: any[]): any {
   console[level](x, ...args)
   return x
 }
 
 export class Logger {
-  warn = log('warn')
-  log = log('log')
-  error = log('error')
-  info = log('info')
+  warn = _log('warn')
+  log = _log('log')
+  error = _log('error')
+  info = _log('info')
 }
+
+export const log = new Logger()

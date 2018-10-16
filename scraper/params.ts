@@ -1,7 +1,7 @@
 import { NBA_API_URL } from "./constants";
 import { buildQueryString } from "./buildQueryString";
 
-export enum EndPoint {
+export enum NbaApiEndpoint {
   ALL_STAR_BALLOT_PREDICTOR = 'allstarballotpredictor',
   BOX_SCORE_ADVANCED = 'boxscoreadvancedv2',
   BOX_SCORE_FOUR_FACTORS = 'boxscorefourfactorsv2',
@@ -12,6 +12,7 @@ export enum EndPoint {
   BOX_SCORE_TRADITIONAL = 'boxscoretraditionalv2',
   BOX_SCORE_USAGE = 'boxscoreusagev2',
   PLAY_BY_PLAY = 'playbyplayv2',
+  TEAM_STATS = 'leaguedashteamstats',
 }
 
 export enum SeasonType {
@@ -38,7 +39,7 @@ export enum Season {
   DEFAULT = '19',
 }
 
-export enum Teams {
+export enum Team {
   ATLANTA_HAWKS = '1610612737',
   BOSTON_CELTICS = '1610612738',
   BROOKLYN_NETS ='1610612751',
@@ -69,20 +70,13 @@ export enum Teams {
   TORONTO_RAPTORS = '1610612761',
   UTAH_JAZZ = '1610612762',
   WASHINGTON_WIZARDS = '1610612764',
+  DEFAULT = '0',
 }
 
 export enum LeagueID {
   NBA = '00',
   ABA = '01',
   DEFAULT = '00',
-}
-
-export function buildGameId(season: Season, game: number): string {
-  let gameStr = `${game}`
-  while (gameStr.length < 5) {
-    gameStr = '0' + gameStr
-  }
-  return `002${season}${gameStr}`
 }
 
 export function buildSeason(season: Season): string {
@@ -208,24 +202,18 @@ export enum AheadBehind {
   DEFAULT = ''
 }
 
-enum YesNoEnum {
+export enum YesNoEnum {
   YES = 'Y',
   NO = 'N',
   DEFAULT = 'N',
 }
 
-export type PlusMinus = YesNoEnum
-
-export type  PaceAdjust = YesNoEnum
-
-export type Rank = YesNoEnum
-
 export class Period {
-  ALL_QUARTERS = '0'
-  FIRST_QUARTER = '1'
-  SECOND_QUARTER = '2'
-  THIRD_QUARTER = '3'
-  FOURTH_QUARTER = '4'
+  static ALL_QUARTERS = '0'
+  static FIRST_QUARTER = '1'
+  static SECOND_QUARTER = '2'
+  static THIRD_QUARTER = '3'
+  static FOURTH_QUARTER = '4'
 
   overtime(overtimes: number) {
     return `${4 + overtimes}`
