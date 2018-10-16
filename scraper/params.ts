@@ -301,35 +301,8 @@ export enum StatCategory {
   Default = PTS,
 }
 
-export type Params = {
-  measureType?: MeasureType,
-  shotClockRange?: ShotClockRange,
-  period: Period,
-  aheadBehind: AheadBehind,
-  ClutchTime,
-  Conference,
-  Direction,
-  Division,
-  StarterBench,
-  EndPoint,
-  GameSegment,
-  GroupQuantity,
-  LeagueID,
-  Location,
-  Month,
-  Outcome,
-  SeasonType,
-  SeasonSegment,
-  Teams,
-  PerMode,
-  PlayerExperience,
-  PlayerPosition,
-  PlayoffRound,
-  Season,
-  PtMeasureType,
-  Scope,
-}
+type Params = any // TODO
 
-export function buildEndpoint(endpoint: EndPoint, params: Params) {
+export function buildEndpoint(endpoint: NbaApiEndpoint, params: Params) {
   return `${NBA_API_URL}/${endpoint}/${buildQueryString(params)}`
 }

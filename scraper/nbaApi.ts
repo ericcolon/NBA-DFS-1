@@ -1,8 +1,8 @@
-import { buildEndpoint } from "./params";
+import { buildEndpoint, NbaApiEndpoint } from "./params";
 import axios from 'axios'
 import { log } from "./log";
 
-export async function nbaApi(endpoint: string, params: any) {
+export async function nbaApi(endpoint: NbaApiEndpoint, params: any) {
   log.info('scraper()...', {endpoint, params})
 
   const url = buildEndpoint(endpoint, params)

@@ -1,7 +1,7 @@
 import { NBA_API_URL } from "./constants"
 import { buildQueryString } from "./buildQueryString"
-import { EndPoint } from "./params"
+import { NbaApiEndpoint } from "./params";
 
-export function buildEndpoint(endpoint: EndPoint, params: any) {
+export function buildEndpoint(endpoint: NbaApiEndpoint, params: any) {
   return `${NBA_API_URL}/${endpoint}/${buildQueryString(params)}`
 }

@@ -1,4 +1,4 @@
-import { Season, Period, BoxScoreType, START_RANGE, END_RANGE, RANGE_TYPE } from "./params";
+import { Season, Period, NbaApiEndpoint, START_RANGE, END_RANGE, RANGE_TYPE } from "./params";
 import { nbaApi } from "./nbaApi";
 import { buildGameId } from "./buildGameId";
 
@@ -6,7 +6,7 @@ export interface BoxScoreResponse {}
 
 export function getBoxScore(
   gameNumber: number,
-  boxScoreType =  BoxScoreType.BOX_SCORE_TRADITIONAL,
+  boxScoreType =  NbaApiEndpoint.BOX_SCORE_TRADITIONAL,
   seasonYear = Season.S2019,
   startPeriod = Period.ALL_QUARTERS,
   endPeriod = Period.ALL_QUARTERS,
