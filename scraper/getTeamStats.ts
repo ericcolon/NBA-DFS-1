@@ -1,6 +1,15 @@
-import { Season, Period, NbaApiEndpoint, START_RANGE, END_RANGE, RANGE_TYPE, Team, MeasureType, PerMode, YesNoEnum, SeasonType, Outcome, Location, Month, GameSegment, ClutchTime } from "./params";
-import { nbaApi } from "./nbaApi";
-import { buildGameId } from "./buildGameId";
+import { nbaApi } from './nbaApi'
+import { Team } from './params/Team';
+import { Season } from './params/Season';
+import { MeasureType } from './params/MeasureType';
+import { PerMode } from './params/PerMode';
+import { YesNoEnum } from './params/YesNoEnum';
+import { SeasonType } from './params/SeasonType';
+import { Outcome } from './params/Outcome';
+import { Month } from './params/Month';
+import { Location } from './params/Location';
+import { GameSegment } from './params/GameSegment';
+import { NbaApiEndpoint } from './params/NbaApiEndpoint';
 
 export interface BoxScoreResponse {}
 

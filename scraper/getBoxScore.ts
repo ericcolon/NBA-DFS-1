@@ -1,6 +1,9 @@
-import { Season, Period, NbaApiEndpoint, START_RANGE, END_RANGE, RANGE_TYPE } from "./params";
 import { nbaApi } from "./nbaApi";
 import { buildGameId } from "./buildGameId";
+import { NbaApiEndpoint } from "./params/NbaApiEndpoint";
+import { Season } from "./params/Season";
+import { Period } from "./params/Period";
+import { START_RANGE, END_RANGE, RANGE_TYPE } from "./params/params";
 
 export interface BoxScoreResponse {}
 

@@ -1,4 +1,4 @@
-import { Season } from "./params";
+import { Season } from './params/Season'
 
 export function buildGameId(season: Season, game: number): string {
   let gameStr = `${game}`

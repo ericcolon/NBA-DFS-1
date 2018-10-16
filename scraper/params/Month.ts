@@ -1,0 +1,16 @@
+export enum Month {
+  All = '0',
+  OCTOBER = '1',
+  NOVEMBER = '2',
+  DECEMBER = '3',
+  JANUARY = '4',
+  FEBRUARY = '5',
+  MARCH = '6',
+  APRIL = '7',
+  MAY = '8',
+  JUNE = '9',
+  JULY = '10',
+  AUGUST = '11',
+  SEPTEMBER = '12',
+  DEFAULT = '0',
+}
