@@ -4,6 +4,7 @@
     "module": "commonjs",
     "strict": true,
     "outDir": "dist",
-    "sourceMap": true
+    "sourceMap": true,
+    "lib": ["es2018", "es2015", "es2016", "es2017"]
   }
 }
