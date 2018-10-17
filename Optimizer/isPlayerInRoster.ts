@@ -1,4 +1,4 @@
-import { Player } from "../lib/Player";
+import { Player } from '../lib/Player'
 
 export const isPlayerInRoster = (player: Player, roster: Player[]): boolean => {
   return roster.some(rosteredPlayer =>

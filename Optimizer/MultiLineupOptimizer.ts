@@ -2,11 +2,10 @@ import {FantasyLineup} from '../lib/FantasyLineup'
 import {Player} from '../lib/Player'
 import {IsValidFunction} from './IsValidFunction'
 import {SingleLineupOptimizer} from './SingleLineupOptimizer'
-import { log } from '../lib/log';
-import { OnNewLineupHandler } from './OnNewLineupHandler';
-import { hashLineup } from './hashLineup';
-
-const validateLineup = SingleLineupOptimizer.validateLineup
+import { log } from '../lib/log'
+import { OnNewLineupHandler } from './OnNewLineupHandler'
+import { hashLineup } from './hashLineup'
+import { validateLineup } from './validateLineup'
 
 export class MultiLineupOptimizer {
   private playerPool: Player[]
@@ -39,9 +38,9 @@ export class MultiLineupOptimizer {
   }
 
   public subscribe = (onNewLineup: OnNewLineupHandler): string => {
-    const id = String(Math.random())
-    this.onNewLineupHandlers[id] = onNewLineup
-    return id
+    const handlerId = String(Math.random())
+    this.onNewLineupHandlers[handlerId] = onNewLineup
+    return handlerId
   }
 
   public unsubscribe = (handlerId: string): void => {
@@ -75,13 +74,13 @@ export class MultiLineupOptimizer {
   }
 
   private emitNewLineup = async (): Promise<void> => {
-      const handlers = Object.values(this.onNewLineupHandlers)
-      await Promise.all(handlers.map(async handler => handler(this.optimals))).catch(log.error)
+    const handlers = Object.values(this.onNewLineupHandlers)
+    await Promise.all(handlers.map(async handler => handler(this.optimals))).catch(log.error)
   }
 
   private findNextLineup = () => {
-      const nextOptimal = this.optimizer.findOptimal()
-      this.optimals.push(validateLineup(nextOptimal))
+    const nextOptimal = this.optimizer.findOptimal()
+    this.optimals.push(validateLineup(nextOptimal))
   }
 
   private isUniqueAndValid: IsValidFunction = (lineup: FantasyLineup) => {

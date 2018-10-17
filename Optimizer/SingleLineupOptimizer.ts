@@ -3,7 +3,7 @@ import {FantasyLineup} from '../lib/FantasyLineup'
 import {InvalidLineup} from '../lib/FantasyLineup'
 import {Player} from '../lib/Player'
 import {IsValidFunction} from './IsValidFunction'
-import { isValidLineup } from './isValidLineup';
+import { isValidLineup } from './isValidLineup'
 
 interface LineupsIfTakeAndPass {
   lineupIfTake: FantasyLineup | InvalidLineup
@@ -11,11 +11,6 @@ interface LineupsIfTakeAndPass {
 }
 
 export class SingleLineupOptimizer {
-  static validateLineup = (lineup: FantasyLineup|InvalidLineup): FantasyLineup => {
-    if (!isValidLineup(lineup)) throw new Error('invalid lineup!')
-    return lineup as FantasyLineup
-  }
-
   private playerPool: Player[]
   private salaryCap: number
   private rosterSpots: number
@@ -41,20 +36,20 @@ export class SingleLineupOptimizer {
   }
 
   private traverseTakeOrNotTakeTree = (currentPoolIndex: number, currentLineup: FantasyLineup): FantasyLineup | InvalidLineup => {
-    const PLAYERS_LEFT: number = this.playerPool.length - currentPoolIndex
-    const SALARY_LEFT: number = this.salaryCap - currentLineup.salary
-    const ROSTER_SPOTS_LEFT: number = this.rosterSpots - currentLineup.roster.length
-    const IS_MEMOIZED: boolean = this.memoizer.isMemoized(PLAYERS_LEFT, SALARY_LEFT, ROSTER_SPOTS_LEFT)
-    const IS_COMPLETE: boolean = currentLineup.isComplete
-
-    if (IS_COMPLETE) {
+    if (currentLineup.isComplete) {
       return this.isValid(currentLineup)
         ? currentLineup
         : InvalidLineup.FAILED_IS_VALID
     }
 
-    if (IS_MEMOIZED) {
-      const memoizedLineup = this.memoizer.getLineup(PLAYERS_LEFT, SALARY_LEFT, ROSTER_SPOTS_LEFT)
+    const playersLeft: number = this.playerPool.length - currentPoolIndex
+    const salaryLeft: number = this.salaryCap - currentLineup.salary
+    const rosterSpotsLeft: number = this.rosterSpots - currentLineup.roster.length
+
+    const isMemoized: boolean = this.memoizer.isMemoized(playersLeft, salaryLeft, rosterSpotsLeft)
+
+    if (isMemoized) {
+      const memoizedLineup = this.memoizer.getLineup(playersLeft, salaryLeft, rosterSpotsLeft)
       return isValidLineup(memoizedLineup)
         ? currentLineup.combine(memoizedLineup)
         : memoizedLineup
