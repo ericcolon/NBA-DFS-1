@@ -29,12 +29,20 @@ export class MultiLineupOptimizer {
   private isRunning: boolean = false
   private optimals: FantasyLineup[] = []
   private lineupHashes = new Set<string>()
+  private optimizer:  SingleLineupOptimizer
 
   constructor(playerPool: Player[], salaryCap: number, rosterSpots: number, isValid: IsValidFunction = () => true, onNewLineup: (lineup: FantasyLineup[]) => any) {
     this.playerPool = playerPool
     this.salaryCap = salaryCap
     this.rosterSpots = rosterSpots
     this.isValid = isValid
+
+    this.optimizer = new SingleLineupOptimizer(
+      this.playerPool,
+      this.salaryCap,
+      this.rosterSpots,
+      this.isUniqueAndValid,
+    )
   }
 
   public start = async (n: number): Promise<FantasyLineup[]> => {
@@ -48,28 +56,22 @@ export class MultiLineupOptimizer {
   }
 
   private findOptimals = async (n: number): Promise<FantasyLineup[]> => {
-    const optimizer = new SingleLineupOptimizer(
-      this.playerPool,
-      this.salaryCap,
-      this.rosterSpots,
-      this.isUniqueAndValid,
-    )
-
-    while(this.isRunning) {
-      try {
-        this.findNextLineup(optimizer)
-      } catch (e) {
-        this.logError(e)
-        this.isRunning = false
-      }
-      if (this.optimals.length === n) this.isRunning = false
+    try {
+      this.findNextLineup()
+    } catch (e) {
+      this.logError(e)
+      this.isRunning = false
     }
 
-    return this.optimals
+    if (this.optimals.length === n) this.isRunning = false
+
+    if (!this.isRunning) return this.optimals
+
+    return this.findOptimals(n)
   }
 
-  private findNextLineup = (optimizer: SingleLineupOptimizer) => {
-      const nextOptimal = optimizer.findOptimal()
+  private findNextLineup = () => {
+      const nextOptimal = this.optimizer.findOptimal()
       this.optimals.push(validateLineup(nextOptimal))
   }
 
