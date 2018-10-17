@@ -9,11 +9,16 @@ interface LineupsIfTakeAndPass {
   lineupIfPass: FantasyLineup | InvalidLineup
 }
 
-
-
-const isTypeOfInvalidLineup = (a: any) => Object.keys(InvalidLineup).some(l => l === a)
+const isValidLineup = (lineup: FantasyLineup|InvalidLineup) => {
+  return !Object.keys(InvalidLineup).some(invalidLineup => lineup === invalidLineup)
+}
 
 export class SingleLineupOptimizer {
+  static validateLineup = (lineup: FantasyLineup|InvalidLineup): FantasyLineup => {
+    if (!isValidLineup(lineup)) throw new Error('invalid lineup!')
+    return lineup as FantasyLineup
+  }
+
   private playerPool: Player[]
   private salaryCap: number
   private rosterSpots: number
@@ -28,11 +33,14 @@ export class SingleLineupOptimizer {
   }
 
   public findOptimal = (): FantasyLineup | InvalidLineup => {
-    const out = this.traverseTakeOrNotTakeTree(0, new FantasyLineup(this.salaryCap, this.rosterSpots, []))
-    if (!out) {
-      throw new Error('unable to find lineup')
-    }
-    return out
+    const optimal = this.traverseTakeOrNotTakeTree(0, new FantasyLineup(
+      this.salaryCap,
+      this.rosterSpots,
+      [],
+    ))
+
+    if (!optimal) throw new Error('unable to find lineup')
+    return optimal
   }
 
   private traverseTakeOrNotTakeTree = (currentPoolIndex: number, currentLineup: FantasyLineup): FantasyLineup | InvalidLineup => {
@@ -43,33 +51,26 @@ export class SingleLineupOptimizer {
     const IS_COMPLETE: boolean = currentLineup.isComplete
 
     if (IS_COMPLETE) {
-      if (!this.isValid(currentLineup)) {
-        return InvalidLineup.FAILED_IS_VALID
-      }
-      return currentLineup
+      return this.isValid(currentLineup)
+        ? currentLineup
+        : InvalidLineup.FAILED_IS_VALID
     }
 
     if (IS_MEMOIZED) {
       const memoizedLineup = this.memoizer.getLineup(PLAYERS_LEFT, SALARY_LEFT, ROSTER_SPOTS_LEFT)
-      if (isTypeOfInvalidLineup(memoizedLineup)) {
-        return memoizedLineup
-      }
-      return currentLineup.combine(memoizedLineup)
+      return isValidLineup(memoizedLineup)
+        ? currentLineup.combine(memoizedLineup)
+        : memoizedLineup
     }
 
     const {lineupIfTake, lineupIfPass} = this.findLineupsIfTakeAndPass(currentPoolIndex, currentLineup)
+
     return this.bestLineup({lineupIfTake, lineupIfPass})
   }
 
-  private bestLineup = (lineups: LineupsIfTakeAndPass): FantasyLineup | InvalidLineup => {
-    const {lineupIfTake, lineupIfPass} = lineups
-
-    if (isTypeOfInvalidLineup(lineupIfPass)) {
-      return lineupIfTake
-    }
-    if (isTypeOfInvalidLineup(lineupIfTake)) {
-      return lineupIfPass
-    }
+  private bestLineup = ({lineupIfTake, lineupIfPass}: LineupsIfTakeAndPass): FantasyLineup | InvalidLineup => {
+    if (!isValidLineup(lineupIfPass)) return lineupIfTake
+    if (!isValidLineup(lineupIfTake)) return lineupIfPass
 
     return (lineupIfTake as FantasyLineup).projection > (lineupIfPass as FantasyLineup).projection
       ? lineupIfTake
@@ -78,13 +79,13 @@ export class SingleLineupOptimizer {
 
 
   private findLineupsIfTakeAndPass = (currentPoolIndex: number, currentLineup: FantasyLineup): LineupsIfTakeAndPass => {
-    const lineupIfPass: FantasyLineup | InvalidLineup = this.traverseTakeOrNotTakeTree(currentPoolIndex + 1, currentLineup)
-
     const currentPlayer: Player = this.playerPool[currentPoolIndex]
-    let addPlayer: FantasyLineup | InvalidLineup = currentLineup.add(currentPlayer)
-    let lineupIfTake: FantasyLineup | InvalidLineup = isTypeOfInvalidLineup(addPlayer)
-      ? addPlayer
-      : this.traverseTakeOrNotTakeTree(currentPoolIndex + 1, addPlayer as FantasyLineup)
+    const luWithCurrentPlayer: FantasyLineup | InvalidLineup = currentLineup.add(currentPlayer)
+
+    const lineupIfPass: FantasyLineup | InvalidLineup = this.traverseTakeOrNotTakeTree(currentPoolIndex + 1, currentLineup)
+    const lineupIfTake: FantasyLineup | InvalidLineup = isValidLineup(luWithCurrentPlayer)
+      ? this.traverseTakeOrNotTakeTree(currentPoolIndex + 1, luWithCurrentPlayer as FantasyLineup)
+      : luWithCurrentPlayer
 
     return {lineupIfTake, lineupIfPass}
   }
