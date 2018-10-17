@@ -3,14 +3,11 @@ import {FantasyLineup} from '../lib/FantasyLineup'
 import {InvalidLineup} from '../lib/FantasyLineup'
 import {Player} from '../lib/Player'
 import {IsValidFunction} from './IsValidFunction'
+import { isValidLineup } from './isValidLineup';
 
 interface LineupsIfTakeAndPass {
   lineupIfTake: FantasyLineup | InvalidLineup
   lineupIfPass: FantasyLineup | InvalidLineup
-}
-
-const isValidLineup = (lineup: FantasyLineup|InvalidLineup) => {
-  return !Object.keys(InvalidLineup).some(invalidLineup => lineup === invalidLineup)
 }
 
 export class SingleLineupOptimizer {

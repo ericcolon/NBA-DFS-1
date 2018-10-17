@@ -3,25 +3,10 @@ import {Player} from '../lib/Player'
 import {IsValidFunction} from './IsValidFunction'
 import {SingleLineupOptimizer} from './SingleLineupOptimizer'
 import { log } from '../lib/log';
-
-const isPlayerInRoster = (player: Player, roster: Player[]): boolean => {
-  return roster.some(rosteredPlayer =>
-    rosteredPlayer.name === player.name &&
-    rosteredPlayer.team === player.team
-  )
-}
-
-export const hashLineup = (playerPool: Player[], {roster}: FantasyLineup) => {
-  return playerPool
-    .map((poolPlayer) => isPlayerInRoster(poolPlayer, roster))
-    .map(Number)
-    .map(String)
-    .join('')
-}
+import { OnNewLineupHandler } from './OnNewLineupHandler';
+import { hashLineup } from './hashLineup';
 
 const validateLineup = SingleLineupOptimizer.validateLineup
-
-export type OnNewLineupHandler = (optimals: FantasyLineup[]) => void
 
 export class MultiLineupOptimizer {
   private playerPool: Player[]
@@ -76,7 +61,7 @@ export class MultiLineupOptimizer {
   private findOptimals = async (n: number): Promise<FantasyLineup[]> => {
     try {
       this.findNextLineup()
-      this.emitNewLineup().catch(log.error)
+      this.emitNewLineup() // don't await
     } catch (e) {
       this.logError(e)
       this.isRunning = false
@@ -91,7 +76,7 @@ export class MultiLineupOptimizer {
 
   private emitNewLineup = async (): Promise<void> => {
       const handlers = Object.values(this.onNewLineupHandlers)
-      handlers.forEach(handler => handler(this.optimals))
+      await Promise.all(handlers.map(async handler => handler(this.optimals))).catch(log.error)
   }
 
   private findNextLineup = () => {
