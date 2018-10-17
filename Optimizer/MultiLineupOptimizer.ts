@@ -21,15 +21,19 @@ export const hashLineup = (playerPool: Player[], {roster}: FantasyLineup) => {
 
 const validateLineup = SingleLineupOptimizer.validateLineup
 
+export type OnNewLineupHandler = (optimals: FantasyLineup[]) => void
+
 export class MultiLineupOptimizer {
   private playerPool: Player[]
   private salaryCap: number
   private rosterSpots: number
   private isValid: IsValidFunction
   private isRunning: boolean = false
-  private optimals: FantasyLineup[] = []
   private lineupHashes = new Set<string>()
   private optimizer:  SingleLineupOptimizer
+  private onNewLineupHandlers: {[handlerId: string]: OnNewLineupHandler} = {}
+
+  private optimals: FantasyLineup[] = []
 
   constructor(playerPool: Player[], salaryCap: number, rosterSpots: number, isValid: IsValidFunction = () => true, onNewLineup: (lineup: FantasyLineup[]) => any) {
     this.playerPool = playerPool
@@ -45,6 +49,20 @@ export class MultiLineupOptimizer {
     )
   }
 
+  public getOptimals = (/*maybe something like sortby*/): FantasyLineup[] => {
+    return this.optimals
+  }
+
+  public subscribe = (onNewLineup: OnNewLineupHandler): string => {
+    const id = String(Math.random())
+    this.onNewLineupHandlers[id] = onNewLineup
+    return id
+  }
+
+  public unsubscribe = (handlerId: string): void => {
+    delete this.onNewLineupHandlers[handlerId]
+  }
+
   public start = async (n: number): Promise<FantasyLineup[]> => {
     if (this.isRunning) throw new Error('cannot start twice')
     return await this.findOptimals(n)
@@ -58,6 +76,7 @@ export class MultiLineupOptimizer {
   private findOptimals = async (n: number): Promise<FantasyLineup[]> => {
     try {
       this.findNextLineup()
+      this.emitNewLineup().catch(log.error)
     } catch (e) {
       this.logError(e)
       this.isRunning = false
@@ -68,6 +87,11 @@ export class MultiLineupOptimizer {
     if (!this.isRunning) return this.optimals
 
     return this.findOptimals(n)
+  }
+
+  private emitNewLineup = async (): Promise<void> => {
+      const handlers = Object.values(this.onNewLineupHandlers)
+      handlers.forEach(handler => handler(this.optimals))
   }
 
   private findNextLineup = () => {
