@@ -6,8 +6,8 @@ import {IsValidFunction} from './IsValidFunction'
 import { isValidLineup } from './isValidLineup'
 
 interface LineupsIfTakeAndPass {
-  lineupIfTake: FantasyLineup | InvalidLineup
-  lineupIfPass: FantasyLineup | InvalidLineup
+  lineupIfTake: FantasyLineup|InvalidLineup
+  lineupIfPass: FantasyLineup|InvalidLineup
 }
 
 export class SingleLineupOptimizer {
@@ -24,7 +24,7 @@ export class SingleLineupOptimizer {
     this.isValid = isValid
   }
 
-  public findOptimal = (): FantasyLineup | InvalidLineup => {
+  public findOptimal = (): FantasyLineup|InvalidLineup => {
     const optimal = this.traverseTakeOrNotTakeTree(0, new FantasyLineup(
       this.salaryCap,
       this.rosterSpots,
@@ -35,24 +35,23 @@ export class SingleLineupOptimizer {
     return optimal
   }
 
-  private traverseTakeOrNotTakeTree = (currentPoolIndex: number, currentLineup: FantasyLineup): FantasyLineup | InvalidLineup => {
+  private traverseTakeOrNotTakeTree = (currentPoolIndex: number, currentLineup: FantasyLineup): FantasyLineup|InvalidLineup => {
+    const playersLeft = this.playerPool.length - currentPoolIndex
+    const salaryLeft = this.salaryCap - currentLineup.salary
+    const rosterSpotsLeft = this.rosterSpots - currentLineup.roster.length
+
+    const isMemoized = this.memoizer.isMemoized(playersLeft, salaryLeft, rosterSpotsLeft)
+
     if (currentLineup.isComplete) {
-      return this.isValid(currentLineup)
-        ? currentLineup
-        : InvalidLineup.FAILED_IS_VALID
+      if (!this.isValid(currentLineup)) return InvalidLineup.FAILED_IS_VALID
+      return currentLineup
     }
-
-    const playersLeft: number = this.playerPool.length - currentPoolIndex
-    const salaryLeft: number = this.salaryCap - currentLineup.salary
-    const rosterSpotsLeft: number = this.rosterSpots - currentLineup.roster.length
-
-    const isMemoized: boolean = this.memoizer.isMemoized(playersLeft, salaryLeft, rosterSpotsLeft)
 
     if (isMemoized) {
       const memoizedLineup = this.memoizer.getLineup(playersLeft, salaryLeft, rosterSpotsLeft)
-      return isValidLineup(memoizedLineup)
-        ? currentLineup.combine(memoizedLineup)
-        : memoizedLineup
+
+      if (!isValidLineup(memoizedLineup)) return memoizedLineup
+      return currentLineup.combine(memoizedLineup)
     }
 
     const {lineupIfTake, lineupIfPass} = this.findLineupsIfTakeAndPass(currentPoolIndex, currentLineup)
@@ -60,7 +59,7 @@ export class SingleLineupOptimizer {
     return this.bestLineup({lineupIfTake, lineupIfPass})
   }
 
-  private bestLineup = ({lineupIfTake, lineupIfPass}: LineupsIfTakeAndPass): FantasyLineup | InvalidLineup => {
+  private bestLineup = ({lineupIfTake, lineupIfPass}: LineupsIfTakeAndPass): FantasyLineup|InvalidLineup => {
     if (!isValidLineup(lineupIfPass)) return lineupIfTake
     if (!isValidLineup(lineupIfTake)) return lineupIfPass
 
@@ -71,15 +70,14 @@ export class SingleLineupOptimizer {
 
 
   private findLineupsIfTakeAndPass = (currentPoolIndex: number, currentLineup: FantasyLineup): LineupsIfTakeAndPass => {
-    const currentPlayer: Player = this.playerPool[currentPoolIndex]
-    const luWithCurrentPlayer: FantasyLineup | InvalidLineup = currentLineup.add(currentPlayer)
+    const currentPlayer = this.playerPool[currentPoolIndex]
+    const luWithCurrentPlayer = currentLineup.add(currentPlayer)
 
-    const lineupIfPass: FantasyLineup | InvalidLineup = this.traverseTakeOrNotTakeTree(currentPoolIndex + 1, currentLineup)
-    const lineupIfTake: FantasyLineup | InvalidLineup = isValidLineup(luWithCurrentPlayer)
+    const lineupIfPass = this.traverseTakeOrNotTakeTree(currentPoolIndex + 1, currentLineup)
+    const lineupIfTake = isValidLineup(luWithCurrentPlayer)
       ? this.traverseTakeOrNotTakeTree(currentPoolIndex + 1, luWithCurrentPlayer as FantasyLineup)
       : luWithCurrentPlayer
 
     return {lineupIfTake, lineupIfPass}
   }
 }
-
