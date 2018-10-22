@@ -1,8 +1,8 @@
-import {Memoizer} from './Memoizer'
-import {FantasyLineup} from '../lib/FantasyLineup'
-import {InvalidLineup} from '../lib/FantasyLineup'
-import {Player} from '../lib/Player'
-import {IsValidFunction} from './IsValidFunction'
+import { Memoizer } from './Memoizer'
+import { FantasyLineup } from '../lib/FantasyLineup'
+import { InvalidLineup } from '../lib/FantasyLineup'
+import { IPlayer } from '../lib/Player'
+import { IsValidFunction } from './IsValidFunction'
 import { isValidLineup } from './isValidLineup'
 
 interface LineupsIfTakeAndPass {
@@ -11,13 +11,13 @@ interface LineupsIfTakeAndPass {
 }
 
 export class SingleLineupOptimizer {
-  private playerPool: Player[]
+  private playerPool: IPlayer[]
   private salaryCap: number
   private rosterSpots: number
   private memoizer: Memoizer = new Memoizer()
   private isValid: IsValidFunction
 
-  constructor(playerPool: Player[], salaryCap: number, rosterSpots: number, isValid: IsValidFunction = () => true) {
+  constructor(playerPool: IPlayer[], salaryCap: number, rosterSpots: number, isValid: IsValidFunction = () => true) {
     this.playerPool = playerPool
     this.salaryCap = salaryCap
     this.rosterSpots = rosterSpots

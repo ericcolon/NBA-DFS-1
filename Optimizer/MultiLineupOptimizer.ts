@@ -1,5 +1,5 @@
 import {FantasyLineup} from '../lib/FantasyLineup'
-import {Player} from '../lib/Player'
+import {IPlayer} from '../lib/Player'
 import {IsValidFunction} from './IsValidFunction'
 import {SingleLineupOptimizer} from './SingleLineupOptimizer'
 import { log } from '../lib/log'
@@ -8,7 +8,7 @@ import { hashLineup } from './hashLineup'
 import { validateLineup } from './validateLineup'
 
 export class MultiLineupOptimizer {
-  private playerPool: Player[]
+  private playerPool: IPlayer[]
   private salaryCap: number
   private rosterSpots: number
   private isValid: IsValidFunction
@@ -19,7 +19,12 @@ export class MultiLineupOptimizer {
 
   private optimals: FantasyLineup[] = []
 
-  constructor(playerPool: Player[], salaryCap: number, rosterSpots: number, isValid: IsValidFunction = () => true, onNewLineup: (lineup: FantasyLineup[]) => any) {
+  constructor(
+    playerPool: IPlayer[],
+    salaryCap: number,
+    rosterSpots: number,
+    isValid: IsValidFunction = () => true,
+  ) {
     this.playerPool = playerPool
     this.salaryCap = salaryCap
     this.rosterSpots = rosterSpots
@@ -103,4 +108,3 @@ export class MultiLineupOptimizer {
     })
   }
 }
-
