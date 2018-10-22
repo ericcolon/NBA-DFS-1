@@ -1,4 +1,4 @@
-import { FantasyLineup, InvalidLineup } from '../lib/FantasyLineup'
+import { FantasyLineup, InvalidLineup } from '../../lib/FantasyLineup'
 import { isValidLineup } from './isValidLineup'
 
 export function validateLineup(lineup: FantasyLineup|InvalidLineup): FantasyLineup {

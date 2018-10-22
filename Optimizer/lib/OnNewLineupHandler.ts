@@ -1,3 +1,3 @@
-import { FantasyLineup } from '../lib/FantasyLineup'
+import { FantasyLineup } from '../../lib/FantasyLineup'
 
 export type OnNewLineupHandler = (optimals: FantasyLineup[]) => void

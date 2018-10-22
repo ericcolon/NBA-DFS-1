@@ -1,6 +1,6 @@
 import { randomPlayerPool } from './randomPlayerPool'
 import { isPlayerInRoster } from './isPlayerInRoster'
-import { IPlayer } from '../lib/Player'
+import { IPlayer } from '../../lib/Player'
 
 describe('isPlayerInRoster', () => {
   const pool = randomPlayerPool(50)

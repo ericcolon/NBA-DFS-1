@@ -1,6 +1,6 @@
 import { randomInt } from './randomInt'
-import { IPlayer } from '../lib/Player'
-import { Team } from '../scraper/params/Team'
+import { IPlayer } from '../../lib/Player'
+import { Team } from '../../scraper/params/Team'
 
 
 export function randomPlayerPool (n: number): IPlayer[] {

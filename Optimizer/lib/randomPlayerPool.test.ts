@@ -1,5 +1,5 @@
 import { randomPlayerPool } from './randomPlayerPool'
-import { IPlayer } from '../lib/Player'
+import { IPlayer } from '../../lib/Player'
 
 
 describe('randomPlayerPool', () => {

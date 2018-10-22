@@ -1,4 +1,4 @@
-import { InvalidLineup, FantasyLineup } from '../lib/FantasyLineup'
+import { InvalidLineup, FantasyLineup } from '../../lib/FantasyLineup'
 import { validateLineup } from './validateLineup'
 
 

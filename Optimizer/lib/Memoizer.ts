@@ -1,4 +1,4 @@
-import {FantasyLineup} from '../lib/FantasyLineup'
+import {FantasyLineup} from '../../lib/FantasyLineup'
 
 export class Memoizer {
   private memoized: { [s: string]: FantasyLineup} = {}

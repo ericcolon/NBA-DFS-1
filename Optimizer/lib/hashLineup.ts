@@ -1,6 +1,6 @@
 import { isPlayerInRoster } from './isPlayerInRoster'
-import { IPlayer } from '../lib/Player'
-import { FantasyLineup } from '../lib/FantasyLineup'
+import { IPlayer } from '../../lib/Player'
+import { FantasyLineup } from '../../lib/FantasyLineup'
 
 
 export function hashLineup(playerPool: IPlayer[], {roster}: FantasyLineup) {

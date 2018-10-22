@@ -1,6 +1,6 @@
 import { hashLineup, hashString } from './hashLineup'
-import { IPlayer} from '../lib/Player'
-import { FantasyLineup } from '../lib/FantasyLineup'
+import { IPlayer} from '../../lib/Player'
+import { FantasyLineup } from '../../lib/FantasyLineup'
 import { randomPlayerPool } from './randomPlayerPool'
 
 

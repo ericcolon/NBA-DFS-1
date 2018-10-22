@@ -1,11 +1,11 @@
 import {FantasyLineup} from '../lib/FantasyLineup'
 import {IPlayer} from '../lib/Player'
-import {IsValidFunction} from './IsValidFunction'
+import {IsValidFunction} from './lib/IsValidFunction'
 import {SingleLineupOptimizer} from './SingleLineupOptimizer'
 import { log } from '../lib/log'
-import { OnNewLineupHandler } from './OnNewLineupHandler'
-import { hashLineup } from './hashLineup'
-import { validateLineup } from './validateLineup'
+import { OnNewLineupHandler } from './lib/OnNewLineupHandler'
+import { hashLineup } from './lib/hashLineup'
+import { validateLineup } from './lib/validateLineup'
 
 export class MultiLineupOptimizer {
   private playerPool: IPlayer[]

@@ -1,4 +1,4 @@
-import { IsValidFunction } from "./IsValidFunction";
+import { IsValidFunction } from "./lib/IsValidFunction";
 import { FantasyLineup } from "../lib/FantasyLineup";
 import { IPlayer } from "../lib/Player";
 import { SingleLineupOptimizer } from "./SingleLineupOptimizer";

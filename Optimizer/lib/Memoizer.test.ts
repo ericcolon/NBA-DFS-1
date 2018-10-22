@@ -1,6 +1,6 @@
 import { Memoizer } from './Memoizer'
 import { randomPlayerPool } from './randomPlayerPool'
-import { FantasyLineup } from '../lib/FantasyLineup'
+import { FantasyLineup } from '../../lib/FantasyLineup'
 
 
 describe('Memoizer', () => {

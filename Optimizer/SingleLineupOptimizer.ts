@@ -1,9 +1,9 @@
-import { Memoizer } from './Memoizer'
+import { Memoizer } from './lib/Memoizer'
 import { FantasyLineup } from '../lib/FantasyLineup'
 import { InvalidLineup } from '../lib/FantasyLineup'
 import { IPlayer } from '../lib/Player'
-import { IsValidFunction } from './IsValidFunction'
-import { isValidLineup } from './isValidLineup'
+import { IsValidFunction } from './lib/IsValidFunction'
+import { isValidLineup } from './lib/isValidLineup'
 
 interface LineupsIfTakeAndPass {
   lineupIfTake: FantasyLineup|InvalidLineup
