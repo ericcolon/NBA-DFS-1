@@ -1,5 +1,5 @@
 
-import {Player} from './Player'
+import {IPlayer} from './Player'
 import {FantasyStat} from '../constants/Stats'
 
 export enum InvalidLineup {
@@ -12,12 +12,12 @@ export enum InvalidLineup {
 export class FantasyLineup {
   public salaryCap: number
   public rosterSpots: number
-  public roster: Player[]
+  public roster: IPlayer[]
   public salary: number
   public projection: number
   public isComplete: boolean
 
-  constructor(salaryCap: number, rosterSpots: number, roster: Player[]) {
+  constructor(salaryCap: number, rosterSpots: number, roster: IPlayer[]) {
     this.salaryCap = salaryCap
     this.rosterSpots = rosterSpots
 
@@ -37,10 +37,10 @@ export class FantasyLineup {
   }
 
   public total = (statType: FantasyStat): number => {
-    return this.roster.reduce((total: number, player: Player): number => total + player[statType], 0)
+    return this.roster.reduce((total: number, player: IPlayer): number => total + player[statType], 0)
   }
 
-  public add = (player: Player): FantasyLineup | InvalidLineup => {
+  public add = (player: IPlayer): FantasyLineup | InvalidLineup => {
     try {
       return new FantasyLineup(this.salaryCap, this.rosterSpots, [...this.roster, player])
     } catch(invalidLineupError) {
