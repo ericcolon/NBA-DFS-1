@@ -14,7 +14,6 @@ interface TestData {
 const testData: TestData[] = []
 
 describe('SingleLineupOptoimizer', () => {
-
   it('should find the optimal lineup', () => {
     testData.forEach(({
       playerPool,
